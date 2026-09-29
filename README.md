@@ -2,6 +2,13 @@
 
 A native macOS research workspace for humans and AI agents. SwiftUI provides a white, minimalist checklist interface; CSV files are the authoritative research records. The app and agent CLI share the same validation, persistence, and workflow engine.
 
+<p align="center">
+  <img src="docs/aims.png" alt="Aims view: aims with progress-pie bullets, a question list with green and red ratings, and the detail panel" width="900">
+</p>
+<p align="center">
+  <img src="docs/graph.png" alt="Graph view: each aim's questions and steps as a spring graph, rated work glowing green or red" width="900">
+</p>
+
 ## Run
 
 Requires macOS 14 or later. There are no third-party runtime dependencies or network services.
@@ -27,8 +34,8 @@ Use **File → New Workspace** for your own research or **File → Open Workspac
 
 The window is a minimalist checklist: small plain rows on a white window, a lot of empty space, no cards. Every row is two lines tall; longer titles truncate, and the full title shows on hover and in the detail panel. The lists take the left 60% of the window and the detail panel the right 40%. Two list columns fit at a time: aims and questions to begin with, and opening a question slides the view over to questions and steps. Close the question or click **‹ Aims** to slide back.
 
-- **Aims** is a list with progress-pie bullets. Click an aim to show its **Questions** in a column to the right; click a question to show its **Steps** (tasks, answers, and conclusions, with results indented beneath their task) in a third column. Click an open aim or question again to close it. Each aim’s bullet is a small pie that fills as its questions are done; hover over it for the count.
-- Every question, step, and result has a status bullet. A dashed circle is **staged**, a filled circle is **working**, and a checked circle is **done** (the title dims). Click the bullet to advance staged → working → done; a further click returns it to staged, so a misclick is easy to undo. Clicking a bullet never changes the selection. A question nobody has set by hand shows as working once any of its steps has started. Failed, held, and skipped steps show a cross, pause, or dash.
+- **Aims** is a list with progress-pie bullets. Click an aim to show its **Questions** in a column to the right; click a question to show its **Steps** (tasks, answers, and conclusions, with each task’s results listed beneath it as plain dots) in a third column. Click an open aim or question again to close it. Each aim’s bullet is a small pie that fills as its questions are done; hover over it for the count.
+- Every question and step has a status bullet; results, being outputs rather than work, show a plain dot and cannot be rated. A dashed circle is **staged**, a filled circle is **working**, and a checked circle is **done** (the title dims). Click the bullet to advance staged → working → done; a further click returns it to staged, so a misclick is easy to undo. Clicking a bullet never changes the selection. A question nobody has set by hand shows as working once any of its steps has started. Failed, held, and skipped steps show a cross, pause, or dash.
 - Hover over a done row’s bullet and a thumb slides out to its left. Click it to cycle **neutral → thumbs up → thumbs down → neutral**. Thumbs up washes the row light green and thumbs down light red, so ratings read at a glance without any extra icons. Ratings are stored in `ratings.csv`, only show while the row is done, and survive a trip through the status cycle.
 - Bullet clicks are explicit overrides, the same as **Mark Staged**, **Mark Working**, and **Mark Done** in the right-click menu. Done is stored as `complete`, working as `running`, and staged as `planned`; `manual_status.csv` tracks records exempted from normal workflow checks, and `events.csv` records each override. Status clicks preserve summaries and output files; they do not create findings. Marking a running task done closes its existing attempt; returning it to staged clears its execution timestamps and closes any active attempt as stopped, keeping its history. Ordinary agent commands still enforce their workflow requirements.
 - The Questions column opens with a **New question** field: type a title and press Return to add it at the top of the list, as many in a row as you like, without moving the selection. The pencil beside it opens the full editor, prefilled with what you typed, for a summary and details. New questions always lead the list, including ones agents add with the CLI. A quiet **+ New aim** row ends the active aims, and steps read top to bottom in execution order. **+ New task** and **+ New conclusion** append to their sections of the question’s workflow. The toolbar’s **+** menu can create any record type.

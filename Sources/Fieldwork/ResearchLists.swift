@@ -58,7 +58,7 @@ struct ResearchLists: View {
                 .id(step.id)
             // Results travel with their task; the whole group slides when steps reorder.
             ForEach(store.workspace.children(step.id).filter { $0.kind == .result }) { result in
-                ListRow(node: result, indent: 18) { store.toggle(result) }.id(result.id)
+                ListRow(node: result) { store.toggle(result) }.id(result.id)
                     .opacity(store.stepDrag?.stepID == step.id ? 0 : 1)
             }
         }

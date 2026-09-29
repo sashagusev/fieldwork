@@ -39,7 +39,7 @@ struct ListRow: View {
     private var inPath: Bool { store.selectedAncestorIDs.contains(node.id) || store.expandedAimID == node.id || store.questionID == node.id }
     private var small: Bool { node.kind == .result }
     // A rating only shows on finished work: thumbs up washes the row green, thumbs down red.
-    private var rating: Rating? { progress == .done ? store.workspace.ratings[node.id] : nil }
+    private var rating: Rating? { progress == .done && node.kind != .result ? store.workspace.ratings[node.id] : nil }
     private var revealed: Bool { progress == .done && store.ratingRevealID == node.id }
     // An aim's bullet is a pie of its finished questions.
     private var tally: (done: Int, total: Int) {
@@ -55,6 +55,10 @@ struct ListRow: View {
                     .frame(width: RowMetrics.bullet, height: RowMetrics.bullet).padding(.leading, flat ? slot + RowMetrics.gutter : 0)
                     .help(tally.total > 0 ? "\(tally.done) of \(tally.total) questions done" : "No questions yet")
                     .accessibilityLabel("\(tally.done) of \(tally.total) questions done")
+            } else if node.kind == .result {
+                // A result is an output, not work to do: a plain dot in line with the step bullets, and nothing to rate.
+                Circle().fill(Palette.muted).frame(width: 5, height: 5)
+                    .frame(width: RowMetrics.bullet, height: RowMetrics.bullet).padding(.leading, slot + RowMetrics.gutter).accessibilityHidden(true)
             } else {
                 HStack(spacing: 0) {
                     ZStack { if revealed { RatingButton(node: node).transition(.move(edge: .trailing).combined(with: .opacity)) } }
